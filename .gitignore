@@ -1,0 +1,34 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Build output
+/dist/
+/build/
+
+# Coverage reports
+coverage/
+
+# Misc
+*.swp
+*.swo
+
+# Python HTTP server artifacts
+__pycache__/
+
+# Supabase local config
+.supabase/
