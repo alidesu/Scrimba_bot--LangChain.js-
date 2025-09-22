@@ -49,6 +49,7 @@ npm install
 ```bash
 node upload-to-supabase.js
 ```
+
 - Configure your Supabase keys in `.env`.
 
 ### 4. Run the API Server
@@ -56,6 +57,7 @@ node upload-to-supabase.js
 ```bash
 node api-server.js
 ```
+
 - Starts Express server at `http://localhost:3001/api/chat`.
 
 ### 5. Start Local Web Server
@@ -63,6 +65,7 @@ node api-server.js
 ```bash
 python3 -m http.server 8000
 ```
+
 - Or use any static server to serve `index.html`.
 
 ### 6. Open the Chatbot
