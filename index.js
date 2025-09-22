@@ -1,78 +1,77 @@
-// import { readFile } from "fs/promises";
-// import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-// import { createClient } from "@supabase/supabase-js";
-// import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-// import { HuggingFaceTransformersEmbeddings } from "@langchain/community/embeddings/hf_transformers";
-// import "dotenv/config";
+// Scrimba AI Chatbot - Main Application Entry Point
+import {
+  askQuestion,
+  askMultipleQuestions,
+  getChatbotStatus,
+} from "./chatbot-service.js";
+import { initializeVectorStore, getVectorStoreStats } from "./embeddings.js";
+import { initializeBrowserInterface } from "./browser-interface.js";
 
-// try {
-//   const text = await readFile("scrimba-info.txt", "utf8");
+/**
+ * Example usage function for testing the chatbot
+ */
+async function testChatbot() {
+  console.log("� Starting Scrimba AI Chatbot Test...\n");
 
-//   const splitter = new RecursiveCharacterTextSplitter({
-//     chunkSize: 500,
-//     chunkOverlap: 50,
-//     separators: ["\n\n", "\n", " ", ""],
-//   });
+  // Display system status
+  console.log("📊 System Status:");
+  console.log("Chatbot:", getChatbotStatus());
+  console.log("Vector Store:", getVectorStoreStats());
+  console.log();
 
-//   const output = await splitter.createDocuments([text]);
+  const questions = [
+    "What are the technical requirements for running Scrimba?",
+    "How do I get started with Scrimba?",
+    "What programming languages can I learn on Scrimba?",
+  ];
 
-//   const sbApiKey = process.env.SUPABASE_API_KEY;
-//   const sbUrl = process.env.SUPABASE_URL;
+  try {
+    const responses = await askMultipleQuestions(questions);
 
-//   const client = createClient(sbUrl, sbApiKey);
+    responses.forEach((response, index) => {
+      console.log(`❓ Question: ${questions[index]}`);
+      console.log(`🤖 Answer: ${response.answer}`);
+      console.log(`📊 Sources: ${response.sources}`);
+      console.log("─".repeat(50));
+    });
 
-
-//   const embeddings = new HuggingFaceTransformersEmbeddings({
-//     modelName: "Xenova/all-MiniLM-L6-v2",
-//   });
-
-//   console.log("🚀 Creating embeddings and storing in Supabase...");
-
-//   await SupabaseVectorStore.fromDocuments(output, embeddings, {
-//     client,
-//     tableName: "documents",
-//   });
-
-//   console.log(
-//     "✅ Successfully created and stored",
-//     output.length,
-//     "document embeddings!"
-//   );
-// } catch (err) {
-//   console.log("❌ Error:", err);
-// }
-
-
-
-
-
-// //AI Application Code
-
-
-document.addEventListener('submit', (e) => {
-    e.preventDefault()
-    progressConversation()
-})
-
-const openAIApiKey = process.env.OPENAI_API_KEY
-
-async function progressConversation() {
-    const userInput = document.getElementById('user-input')
-    const chatbotConversation = document.getElementById('chatbot-conversation-container')
-    const question = userInput.value
-    userInput.value = ''
-
-    // add human message
-    const newHumanSpeechBubble = document.createElement('div')
-    newHumanSpeechBubble.classList.add('speech', 'speech-human')
-    chatbotConversation.appendChild(newHumanSpeechBubble)
-    newHumanSpeechBubble.textContent = question
-    chatbotConversation.scrollTop = chatbotConversation.scrollHeight
-
-    // add AI message
-    const newAiSpeechBubble = document.createElement('div')
-    newAiSpeechBubble.classList.add('speech', 'speech-ai')
-    chatbotConversation.appendChild(newAiSpeechBubble)
-    newAiSpeechBubble.textContent = result
-    chatbotConversation.scrollTop = chatbotConversation.scrollHeight
+    console.log("✅ Test completed successfully!");
+  } catch (error) {
+    console.error("❌ Test failed:", error.message);
+  }
 }
+
+/**
+ * Initialize the application for browser use
+ */
+function initializeBrowser() {
+  console.log("🌐 Initializing browser interface...");
+  initializeBrowserInterface();
+}
+
+/**
+ * Main application entry point
+ */
+async function main() {
+  try {
+    // Initialize vector store
+    await initializeVectorStore();
+
+    // Check if running in browser or Node.js
+    if (typeof window !== "undefined") {
+      // Browser environment
+      initializeBrowser();
+    } else {
+      // Node.js environment - run test
+      await testChatbot();
+    }
+  } catch (error) {
+    console.error("❌ Application initialization failed:", error.message);
+  }
+}
+
+// Run the application
+main();
+
+// Export main functions for external use
+export { askQuestion, initializeVectorStore, initializeBrowser };
