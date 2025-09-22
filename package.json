@@ -11,6 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "langchain": "^0.3.34"
+    "@langchain/openai": "^0.6.13",
+    "@supabase/supabase-js": "^2.57.4",
+    "dotenv": "^17.2.2",
+    "env": "^0.0.2",
+    "langchain": "^0.3.34",
+    "openai": "^5.22.0"
   }
 }
